@@ -247,6 +247,19 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function saveToS3(string $path): self
+    {
+        if (! $this->onLambda) {
+            return $this->saveOnDisk($this->diskName ?? 's3', $path);
+        }
+
+        $this
+            ->getBrowsershot()
+            ->saveToS3($path, $this->diskName ?? 's3');
+
+        return $this;
+    }
+
     public function disk(string $diskName, string $visibility = 'private'): self
     {
         $this->diskName = $diskName;
